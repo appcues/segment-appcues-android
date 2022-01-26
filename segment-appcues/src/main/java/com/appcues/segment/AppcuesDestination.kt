@@ -20,7 +20,7 @@ data class AppcuesSettings(
 class AppcuesDestination(private val context: Context) : DestinationPlugin(), AndroidLifecycle {
     override val key: String = "Appcues"
 
-    private var appcues: Appcues? = null
+    var appcues: Appcues? = null
 
     override fun update(settings: Settings, type: Plugin.UpdateType) {
         super.update(settings, type)
@@ -56,7 +56,7 @@ class AppcuesDestination(private val context: Context) : DestinationPlugin(), An
         return payload
     }
 
-    private fun JsonObject.mapToAppcues(): HashMap<String, Any> { // = this.mapValues { (_, value) ->
+    private fun JsonObject.mapToAppcues(): HashMap<String, Any>? { // = this.mapValues { (_, value) ->
         val map: HashMap<String, Any> = hashMapOf()
         this.forEach { (key, value) ->
             val newValue = value.toContent()
@@ -64,6 +64,7 @@ class AppcuesDestination(private val context: Context) : DestinationPlugin(), An
                 map[key] = newValue
             }
         }
+        if (map.size == 0) return null
         return map
     }
 
