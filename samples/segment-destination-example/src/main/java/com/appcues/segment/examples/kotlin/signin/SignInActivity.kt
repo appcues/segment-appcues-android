@@ -7,11 +7,11 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.appcues.segment.examples.kotlin.ExampleApplication
+import com.appcues.segment.examples.kotlin.R
 import com.appcues.segment.examples.kotlin.R.id
 import com.appcues.segment.examples.kotlin.R.string
 import com.appcues.segment.examples.kotlin.databinding.ActivitySigninBinding
 import com.appcues.segment.examples.kotlin.main.MainActivity
-import com.appcues.segment.examples.kotlin.R
 
 class SignInActivity : AppCompatActivity() {
     private val binding by lazy { ActivitySigninBinding.inflate(layoutInflater) }
@@ -38,7 +38,6 @@ class SignInActivity : AppCompatActivity() {
             // Segment does not have a matching concept to the Appcues
             // anonymous() function - so we can use the Appcues SDK
             // directly if that functionality is required
-            //analytics.anonymous()
             ExampleApplication.appcuesDestination.appcues?.anonymous()
             completeSignIn()
         }
