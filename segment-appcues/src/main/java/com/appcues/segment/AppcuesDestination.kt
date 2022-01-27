@@ -3,12 +3,17 @@ package com.appcues.segment
 import android.content.Context
 import com.appcues.Appcues
 import com.segment.analytics.kotlin.android.plugins.AndroidLifecycle
+import com.segment.analytics.kotlin.core.BaseEvent
+import com.segment.analytics.kotlin.core.GroupEvent
+import com.segment.analytics.kotlin.core.IdentifyEvent
+import com.segment.analytics.kotlin.core.ScreenEvent
+import com.segment.analytics.kotlin.core.Settings
+import com.segment.analytics.kotlin.core.TrackEvent
 import com.segment.analytics.kotlin.core.platform.DestinationPlugin
 import com.segment.analytics.kotlin.core.platform.Plugin
-import com.segment.analytics.kotlin.core.*
-import com.segment.analytics.kotlin.core.platform.plugins.logger.*
+import com.segment.analytics.kotlin.core.platform.plugins.logger.log
 import com.segment.analytics.kotlin.core.utilities.toContent
-import kotlinx.serialization.*
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonObject
 
 @Serializable
@@ -37,22 +42,22 @@ class AppcuesDestination(private val context: Context) : DestinationPlugin(), An
     }
 
     override fun identify(payload: IdentifyEvent): BaseEvent {
-        appcues?.identify(payload.userId, payload.traits?.mapToAppcues())
+        appcues?.identify(payload.userId, payload.traits.mapToAppcues())
         return payload
     }
 
     override fun track(payload: TrackEvent): BaseEvent {
-        appcues?.track(payload.event, payload.properties?.mapToAppcues())
+        appcues?.track(payload.event, payload.properties.mapToAppcues())
         return payload
     }
 
     override fun screen(payload: ScreenEvent): BaseEvent {
-        appcues?.screen(payload.name, payload.properties?.mapToAppcues())
+        appcues?.screen(payload.name, payload.properties.mapToAppcues())
         return payload
     }
 
     override fun group(payload: GroupEvent): BaseEvent {
-        appcues?.group(payload.groupId, payload.traits?.mapToAppcues())
+        appcues?.group(payload.groupId, payload.traits.mapToAppcues())
         return payload
     }
 
@@ -69,8 +74,8 @@ class AppcuesDestination(private val context: Context) : DestinationPlugin(), An
     }
 
     private fun isAllowedProperty(value: Any): Boolean {
-        // TODO: will need to evolve as we see what primitive types the underlying SDK
-        // will support in the analytics network traffic - ex: URLs or Dates?
+        // will need to evolve as we see what primitive types the underlying SDK
+        // supports in the analytics network traffic - ex: URLs or Dates?
         return value is String || value is Boolean || value is Int || value is Double
     }
 }

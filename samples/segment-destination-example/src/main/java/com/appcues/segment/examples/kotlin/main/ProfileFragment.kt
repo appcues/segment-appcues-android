@@ -10,8 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.appcues.segment.examples.kotlin.ExampleApplication
-import com.appcues.segment.examples.kotlin.databinding.FragmentProfileBinding
 import com.appcues.segment.examples.kotlin.R
+import com.appcues.segment.examples.kotlin.databinding.FragmentProfileBinding
 import com.appcues.segment.examples.kotlin.signin.SignInActivity
 
 class ProfileFragment : Fragment() {
