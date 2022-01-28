@@ -34,7 +34,7 @@ class AppcuesDestination(private val context: Context) : DestinationPlugin(), An
             analytics.log("Appcues Destination is enabled")
             val appcuesSettings: AppcuesSettings? = settings.destinationSettings(key)
             if (appcuesSettings != null) {
-                appcues = Appcues.Builder(context, appcuesSettings.appcuesId, "").logging(Appcues.LoggingLevel.BASIC).build()
+                appcues = Appcues.Builder(context, appcuesSettings.appcuesId, "").build()
                 analytics.log("Appcues Destination loaded")
             }
         } else {
