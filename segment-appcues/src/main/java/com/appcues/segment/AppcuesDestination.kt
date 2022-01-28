@@ -23,6 +23,7 @@ data class AppcuesSettings(
 )
 
 class AppcuesDestination(private val context: Context) : DestinationPlugin(), AndroidLifecycle {
+
     override val key: String = "Appcues"
 
     var appcues: Appcues? = null
@@ -61,11 +62,11 @@ class AppcuesDestination(private val context: Context) : DestinationPlugin(), An
         return payload
     }
 
-    private fun JsonObject.mapToAppcues(): HashMap<String, Any>? { // = this.mapValues { (_, value) ->
+    private fun JsonObject.mapToAppcues(): HashMap<String, Any>? {
         val map: HashMap<String, Any> = hashMapOf()
         this.forEach { (key, value) ->
             val newValue = value.toContent()
-            if (newValue != null && isAllowedProperty(newValue)) {
+            if (newValue != null && newValue.isAllowedPropertyType) {
                 map[key] = newValue
             }
         }
@@ -73,9 +74,10 @@ class AppcuesDestination(private val context: Context) : DestinationPlugin(), An
         return map
     }
 
-    private fun isAllowedProperty(value: Any): Boolean {
-        // will need to evolve as we see what primitive types the underlying SDK
-        // supports in the analytics network traffic - ex: URLs or Dates?
-        return value is String || value is Boolean || value is Int || value is Double
-    }
+    private val Any.isAllowedPropertyType: Boolean
+        get() {
+            // will need to evolve as we see what primitive types the underlying SDK
+            // supports in the analytics network traffic - ex: URLs or Dates?
+            return this is String || this is Boolean || this is Int || this is Double
+        }
 }
