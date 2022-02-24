@@ -4,14 +4,14 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.10'
 }
 
+apply from: 'publish-maven.gradle'
+
 android {
     compileSdk 31
 
     defaultConfig {
         minSdk 21
         targetSdk 31
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -30,39 +30,14 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-
-    buildFeatures {
-        compose true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.1.0-rc01"
-    }
 }
 
 dependencies {
-    // Segment
+
     implementation 'com.segment.analytics.kotlin:android:1.4.2'
 
-    // Appcues
-    implementation files('libs/appcues-debug.aar')
-
-    // Appcues SDK Compose dependencies
-    // hopefully will not be needed directly in customer
-    // app once we have SDK integration that is not using a local .aar
-    implementation 'androidx.activity:activity-compose:1.4.0'
-    implementation 'androidx.compose.ui:ui:1.0.5'
-    implementation "androidx.compose.ui:ui-tooling:1.0.5"
-    implementation 'androidx.compose.material:material:1.0.5'
-    implementation "com.github.skydoves:landscapist-glide:1.4.5"
-
-    // Appcues SDK Koin dependencies
-    // hopefully will not be needed directly in customer
-    // app once we have SDK integration that is not using a local .aar
-    implementation "io.insert-koin:koin-core:3.1.4"
-    implementation "io.insert-koin:koin-android:3.1.4"
-
-    implementation "androidx.appcompat:appcompat:1.4.1"
+    //replace with public maven version eventually
+    api('com.appcues:appcues-debug:0.1.0') { changing = true }
 
     testImplementation 'junit:junit:4.13.2'
 

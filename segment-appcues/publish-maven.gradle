@@ -1,0 +1,38 @@
+apply plugin: 'maven-publish'
+
+def pluginProperties = new Properties()
+file("segment-appcues.properties").withInputStream { pluginProperties.load(it) }
+
+android {
+    defaultConfig {
+        buildConfigField "String", "PLUGIN_VERSION", "\"${pluginProperties.getProperty("VERSION")}\""
+    }
+}
+
+// Because the components are created only during the afterEvaluate phase, you must
+// configure your publications using the afterEvaluate() lifecycle method.
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                // Applies the component for the release build variant.
+                from components.release
+
+                // You can then customize attributes of the publication as shown below.
+                groupId = pluginProperties.getProperty("GROUP_ID")
+                artifactId = pluginProperties.getProperty("NAME")
+                version = pluginProperties.getProperty("VERSION")
+            }
+            // Creates a Maven publication called “debug”.
+            debug(MavenPublication) {
+                // Applies the component for the debug build variant.
+                from components.debug
+
+                groupId = pluginProperties.getProperty("GROUP_ID")
+                artifactId = pluginProperties.getProperty("NAME") + "-debug"
+                version = pluginProperties.getProperty("VERSION")
+            }
+        }
+    }
+}

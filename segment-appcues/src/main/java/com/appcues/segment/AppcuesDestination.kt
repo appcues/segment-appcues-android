@@ -26,6 +26,9 @@ class AppcuesDestination(private val context: Context) : DestinationPlugin(), An
 
     override val key: String = "Appcues"
 
+    val version: String
+        get() = "${BuildConfig.PLUGIN_VERSION}-${BuildConfig.BUILD_TYPE}"
+
     var appcues: Appcues? = null
 
     override fun update(settings: Settings, type: Plugin.UpdateType) {
