@@ -18,13 +18,13 @@ import kotlinx.serialization.json.JsonObject
 
 @Serializable
 data class AppcuesSettings(
-    var appcuesId: String,
-    // var applicationId: String // working with Segment to get this added
+    var accountId: String,
+    var applicationId: String
 )
 
 class AppcuesDestination(private val context: Context) : DestinationPlugin(), AndroidLifecycle {
 
-    override val key: String = "Appcues"
+    override val key: String = "Appcues Mobile"
 
     val version: String
         get() = "${BuildConfig.PLUGIN_VERSION}-${BuildConfig.BUILD_TYPE}"
@@ -37,7 +37,7 @@ class AppcuesDestination(private val context: Context) : DestinationPlugin(), An
             analytics.log("Appcues Destination is enabled")
             val appcuesSettings: AppcuesSettings? = settings.destinationSettings(key)
             if (appcuesSettings != null) {
-                appcues = Appcues.Builder(context, appcuesSettings.appcuesId, "").build()
+                appcues = Appcues.Builder(context, appcuesSettings.accountId, appcuesSettings.applicationId).build()
                 analytics.log("Appcues Destination loaded")
             }
         } else {

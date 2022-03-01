@@ -37,7 +37,7 @@ dependencies {
     implementation 'com.segment.analytics.kotlin:android:1.4.2'
 
     //replace with public maven version eventually
-    api('com.appcues:appcues-debug:0.1.0') { changing = true }
+    api('com.appcues:appcues:0.1.0') { changing = true }
 
     testImplementation 'junit:junit:4.13.2'
 
