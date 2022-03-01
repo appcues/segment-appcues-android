@@ -44,12 +44,12 @@ dependencies {
     /**
      * Segment-Appcues contains the DestinationPlugin for Appcues
      *
-     * 1. run gradle publishDebugPublicationToMavenLocal
+     * 1. run gradle publishReleasePublicationToMavenLocal
      * 2. replace the implementation project(":segment-appcues") with the versioned implementation below.
      * The `changing = true` forces gradle to reload dependency.
      */
     implementation project(":segment-appcues")
-    //implementation('com.appcues:segment-appcues-debug:0.1.0') {
+    //implementation('com.appcues:segment-appcues:0.1.0') {
     //    changing = true
     //}
 
