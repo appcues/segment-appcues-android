@@ -33,10 +33,6 @@ class EventsFragment : Fragment() {
             analytics.track("event2")
         }
 
-        binding.buttonSampleModal.setOnClickListener {
-            ExampleApplication.appcuesDestination.appcues?.show("1234")
-        }
-
         return binding.root
     }
 
