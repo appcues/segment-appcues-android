@@ -3,7 +3,14 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        mavenLocal()
+        maven {
+            // for Appcues Android SDK package via GitHub Package Registry
+            url = uri("https://maven.pkg.github.com/appcues/appcues-android-sdk")
+            credentials {
+                username = System.getenv("GPR_USERNAME")
+                password = System.getenv("GPR_TOKEN")
+            }
+        }
     }
 }
 rootProject.name = "segment-appcues-android"
