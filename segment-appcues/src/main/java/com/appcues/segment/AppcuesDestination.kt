@@ -2,6 +2,7 @@ package com.appcues.segment
 
 import android.content.Context
 import com.appcues.Appcues
+import com.appcues.AppcuesConfig
 import com.segment.analytics.kotlin.android.plugins.AndroidLifecycle
 import com.segment.analytics.kotlin.core.BaseEvent
 import com.segment.analytics.kotlin.core.GroupEvent
@@ -24,7 +25,7 @@ data class AppcuesSettings(
 
 class AppcuesDestination(
     private val context: Context,
-    private val builder: (Appcues.Builder.() -> Appcues.Builder)? = null,
+    private val config: (AppcuesConfig.() -> Unit)? = null,
 ) : DestinationPlugin(), AndroidLifecycle {
 
     override val key: String = "Appcues Mobile"
@@ -40,10 +41,7 @@ class AppcuesDestination(
             analytics.log("Appcues Destination is enabled")
             val appcuesSettings: AppcuesSettings? = settings.destinationSettings(key)
             if (appcuesSettings != null) {
-                appcues = Appcues.Builder(context, appcuesSettings.accountId, appcuesSettings.applicationId).apply {
-                    builder?.let { it(this) }
-                }.build()
-
+                appcues = Appcues(context, appcuesSettings.accountId, appcuesSettings.applicationId, config)
                 analytics.log("Appcues Destination loaded")
             }
         } else {
