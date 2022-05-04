@@ -1,7 +1,7 @@
 package com.appcues.segment.examples.kotlin
 
 import android.app.Application
-import com.appcues.Appcues
+import com.appcues.LoggingLevel
 import com.appcues.segment.AppcuesDestination
 import com.segment.analytics.kotlin.android.Analytics
 import com.segment.analytics.kotlin.core.Analytics
@@ -25,9 +25,9 @@ class ExampleApplication : Application() {
         // Appcues SDK in other areas of the code.  This enables access to any additional SDK
         // functionality desired, like the Debugger
         appcuesDestination = AppcuesDestination(applicationContext) {
-            // optionally apply customizations using the Appcues.Builder here
-            this.logging(Appcues.LoggingLevel.DEBUG)
-                .sessionTimeout(3600)
+            // optionally apply customizations using the AppcuesConfig here
+            loggingLevel = LoggingLevel.DEBUG
+            sessionTimeout = 3600
         }
         analytics.add(appcuesDestination)
     }
