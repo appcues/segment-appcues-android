@@ -26,7 +26,8 @@ class ExampleApplication : Application() {
         // functionality desired, like the Debugger
         appcuesDestination = AppcuesDestination(applicationContext) {
             // optionally apply customizations using the Appcues.Builder here
-            it.logging(Appcues.LoggingLevel.DEBUG)
+            this.logging(Appcues.LoggingLevel.DEBUG)
+                .sessionTimeout(3600)
         }
         analytics.add(appcuesDestination)
     }
