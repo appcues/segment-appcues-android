@@ -24,7 +24,7 @@ data class AppcuesSettings(
 
 class AppcuesDestination(
     private val context: Context,
-    private val applyBuilderOptions: ((Appcues.Builder) -> Appcues.Builder)? = null,
+    private val builder: (Appcues.Builder.() -> Appcues.Builder)? = null,
 ) : DestinationPlugin(), AndroidLifecycle {
 
     override val key: String = "Appcues Mobile"
@@ -41,7 +41,7 @@ class AppcuesDestination(
             val appcuesSettings: AppcuesSettings? = settings.destinationSettings(key)
             if (appcuesSettings != null) {
                 appcues = Appcues.Builder(context, appcuesSettings.accountId, appcuesSettings.applicationId).apply {
-                    applyBuilderOptions?.let { it(this) }
+                    builder?.let { it(this) }
                 }.build()
 
                 analytics.log("Appcues Destination loaded")
