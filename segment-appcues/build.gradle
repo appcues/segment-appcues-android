@@ -30,13 +30,14 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    namespace 'com.appcues.segment'
 }
 
 dependencies {
 
     implementation 'com.segment.analytics.kotlin:android:1.4.2'
 
-    api 'com.appcues:appcues:0.1.0-alpha+404'
+    api 'com.appcues:appcues:1.0.0-beta01'
 
     testImplementation 'junit:junit:4.13.2'
 

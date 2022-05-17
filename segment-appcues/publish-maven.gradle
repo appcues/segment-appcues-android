@@ -1,4 +1,10 @@
 apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+def signingKey = System.getenv("GPG_SIGNING_KEY")
+def signingKeyPwd = System.getenv("GPG_SIGNING_KEY_PWD")
+def ossrhUsername = System.getenv("OSSRH_USERNAME")
+def ossrhPassword = System.getenv("OSSRH_PASSWORD")
 
 def pluginProperties = new Properties()
 file("segment-appcues.properties").withInputStream { pluginProperties.load(it) }
@@ -21,8 +27,34 @@ afterEvaluate {
 
                 // You can then customize attributes of the publication as shown below.
                 groupId = pluginProperties.getProperty("GROUP_ID")
-                artifactId = pluginProperties.getProperty("NAME")
+                artifactId = pluginProperties.getProperty("ARTIFACT_ID")
                 version = pluginProperties.getProperty("VERSION")
+
+                pom {
+                    name = pluginProperties.getProperty("NAME")
+                    description = pluginProperties.getProperty("DESCRIPTION")
+                    url = pluginProperties.getProperty("ORG_URL")
+                    licenses {
+                        license {
+                            name = pluginProperties.getProperty("LICENSE")
+                            url = pluginProperties.getProperty("LICENSE_URL")
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = pluginProperties.getProperty("ORG_ID")
+                            name = pluginProperties.getProperty("ORG_NAME")
+                            organization = pluginProperties.getProperty("ORG_NAME")
+                            organizationUrl = pluginProperties.getProperty("ORG_URL")
+                            email = pluginProperties.getProperty("ORG_EMAIL")
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:git://github.com/' + pluginProperties.getProperty("GITHUB_PATH") + '.git'
+                        developerConnection = 'scm:git:ssh://github.com:' + pluginProperties.getProperty("GITHUB_PATH") + '.git'
+                        url = 'https://github.com/' + pluginProperties.getProperty("GITHUB_PATH")
+                    }
+                }
             }
             // Creates a Maven publication called “debug”.
             debug(MavenPublication) {
@@ -30,9 +62,24 @@ afterEvaluate {
                 from components.debug
 
                 groupId = pluginProperties.getProperty("GROUP_ID")
-                artifactId = pluginProperties.getProperty("NAME") + "-debug"
+                artifactId = pluginProperties.getProperty("ARTIFACT_ID") + "-debug"
                 version = pluginProperties.getProperty("VERSION")
             }
         }
+        repositories {
+            maven {
+                name = pluginProperties.getProperty("MAVEN_NAME")
+                url = pluginProperties.getProperty("MAVEN_URL")
+                credentials {
+                    username = ossrhUsername
+                    password = ossrhPassword
+                }
+            }
+        }
+    }
+
+    signing {
+        useInMemoryPgpKeys(signingKey, signingKeyPwd)
+        sign publishing.publications.release
     }
 }

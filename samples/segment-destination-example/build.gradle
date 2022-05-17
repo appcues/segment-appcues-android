@@ -35,29 +35,21 @@ android {
     buildFeatures {
         viewBinding true
     }
+    namespace 'com.appcues.segment.examples.kotlin'
 }
 
 dependencies {
     // Segment
     implementation 'com.segment.analytics.kotlin:android:1.4.2'
 
-    /**
-     * Segment-Appcues contains the DestinationPlugin for Appcues
-     *
-     * 1. run gradle publishReleasePublicationToMavenLocal
-     * 2. replace the implementation project(":segment-appcues") with the versioned implementation below.
-     * The `changing = true` forces gradle to reload dependency.
-     */
+    // Segment-Appcues plugin
     implementation project(":segment-appcues")
-    //implementation('com.appcues:segment-appcues:0.1.0') {
-    //    changing = true
-    //}
 
     implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'com.google.android.material:material:1.6.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.1'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
 
     testImplementation 'junit:junit:4.13.2'
 
