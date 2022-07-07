@@ -9,9 +9,28 @@ def ossrhPassword = System.getenv("OSSRH_PASSWORD")
 def pluginProperties = new Properties()
 file("segment-appcues.properties").withInputStream { pluginProperties.load(it) }
 
+private String generateVersionName() {
+    def pluginProperties = new Properties()
+    file("segment-appcues.properties").withInputStream { pluginProperties.load(it) }
+
+    String major = pluginProperties.getProperty("VERSION_MAJOR")
+    String minor = pluginProperties.getProperty("VERSION_MINOR")
+    String patch = pluginProperties.getProperty("VERSION_PATCH")
+    String classifier = pluginProperties.getProperty("VERSION_CLASSIFIER")
+    String versionName = "${major}.${minor}.${patch}"
+
+    if (classifier != null) {
+        versionName += "-" + classifier
+    }
+
+    return versionName
+}
+
+def versionName = generateVersionName()
+
 android {
     defaultConfig {
-        buildConfigField "String", "PLUGIN_VERSION", "\"${pluginProperties.getProperty("VERSION")}\""
+        buildConfigField "String", "PLUGIN_VERSION", "\"${versionName}\""
     }
 }
 
@@ -28,7 +47,7 @@ afterEvaluate {
                 // You can then customize attributes of the publication as shown below.
                 groupId = pluginProperties.getProperty("GROUP_ID")
                 artifactId = pluginProperties.getProperty("ARTIFACT_ID")
-                version = pluginProperties.getProperty("VERSION")
+                version = versionName
 
                 pom {
                     name = pluginProperties.getProperty("NAME")
@@ -63,7 +82,7 @@ afterEvaluate {
 
                 groupId = pluginProperties.getProperty("GROUP_ID")
                 artifactId = pluginProperties.getProperty("ARTIFACT_ID") + "-debug"
-                version = pluginProperties.getProperty("VERSION")
+                version = versionName
             }
         }
         repositories {
