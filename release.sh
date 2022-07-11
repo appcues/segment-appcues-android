@@ -47,13 +47,13 @@ if [ $branch != 'main' ]
 then
 	echo "The 'main' must be the current branch to make a release."
 	echo "You are currently on: $branch"
-	#exit 1
+	exit 1
 fi
 
 if [ -n "$(git status --porcelain)" ]
 then
     echo "There are uncommited changes. Please commit and create a pull request or stash them.";
-    #exit 1
+    exit 1
 fi
 
 # check that the required maven central signing and auth vars are set
@@ -133,12 +133,12 @@ sed -i '' "/^VERSION_CLASSIFIER /s/=.*$/= $newVersionClassifier/" ./segment-appc
 
 # commit the version change.
 git commit -am "🔖 Update version to $newVersion"
-#git push
+git push
 # gh release will make both the tag and the release itself.
-#gh release create $newVersion -F $tempFile -t $newVersion
+gh release create $newVersion -F $tempFile -t $newVersion
 
 # remove the tempfile.
 rm $tempFile
 
 # publish to Maven Central
-#gradle segment-appcues:publishReleasePublicationToOSSRHRepository
+gradle segment-appcues:publishReleasePublicationToOSSRHRepository
