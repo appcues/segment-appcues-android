@@ -17,7 +17,7 @@ Or the following for Kotlin DSL
 implementation("com.appcues:segment-appcues:<latest_version>")
 ```
 
-
+An installation [tutorial video](https://appcues.wistia.com/medias/x2favz5qnu) is also available, for reference.
 
 ## Using the Plugin in your App
 
