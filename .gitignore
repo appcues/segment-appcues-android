@@ -27,6 +27,8 @@ output.json
 /.idea/vcs.xml
 /.idea/workspace.xml
 /.idea/navEditor.xml
+/.idea/deploymentTargetDropDown.xml
+/.idea/assetWizardSettings.xml
 
 # Keystore files
 *.jks
