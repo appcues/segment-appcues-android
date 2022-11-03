@@ -69,14 +69,14 @@ class AppcuesDestination(
     }
 
     override fun track(payload: TrackEvent): BaseEvent {
-        if (payload.isAppcuesInternal.not()) {
+        if (payload.isValid) {
             appcues?.track(payload.event, payload.properties.mapToAppcues())
         }
         return payload
     }
 
     override fun screen(payload: ScreenEvent): BaseEvent {
-        if (payload.isAppcuesInternal.not()) {
+        if (payload.isValid) {
             appcues?.screen(payload.name, payload.properties.mapToAppcues())
         }
         return payload
@@ -99,11 +99,11 @@ class AppcuesDestination(
         return map
     }
 
-    private val TrackEvent.isAppcuesInternal: Boolean
-        get() = this.event.lowercase().startsWith(APPCUES_EVENT_PREFIX)
+    private val TrackEvent.isValid: Boolean
+        get() = this.event.isNotEmpty() && !this.event.lowercase().startsWith(APPCUES_EVENT_PREFIX)
 
-    private val ScreenEvent.isAppcuesInternal: Boolean
-        get() = this.name.lowercase().startsWith(APPCUES_EVENT_PREFIX)
+    private val ScreenEvent.isValid: Boolean
+        get() = this.name.isNotEmpty() && !this.name.lowercase().startsWith(APPCUES_EVENT_PREFIX)
 
     private val Any.isAllowedPropertyType: Boolean
         get() {
