@@ -15,6 +15,7 @@ import com.segment.analytics.kotlin.core.platform.Plugin
 import com.segment.analytics.kotlin.core.platform.plugins.logger.log
 import com.segment.analytics.kotlin.core.utilities.toContent
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.JsonObject
 
 @Serializable
@@ -28,6 +29,10 @@ class AppcuesDestination(
     private val config: (AppcuesConfig.() -> Unit)? = null,
 ) : DestinationPlugin(), AndroidLifecycle {
 
+    companion object {
+        private const val APPCUES_EVENT_PREFIX = "appcues:"
+    }
+
     override val key: String = "Appcues Mobile"
 
     val version: String
@@ -37,15 +42,24 @@ class AppcuesDestination(
 
     override fun update(settings: Settings, type: Plugin.UpdateType) {
         super.update(settings, type)
+
         if (settings.hasIntegrationSettings(this)) {
-            analytics.log("Appcues Destination is enabled")
-            val appcuesSettings: AppcuesSettings? = settings.destinationSettings(key)
-            if (appcuesSettings != null) {
-                appcues = Appcues(context, appcuesSettings.accountId, appcuesSettings.applicationId, config)
-                analytics.log("Appcues Destination loaded")
+            try {
+                val appcuesSettings: AppcuesSettings? = settings.destinationSettings(key)
+                if (appcuesSettings != null) {
+                    appcues = Appcues(context, appcuesSettings.accountId, appcuesSettings.applicationId) {
+                        config?.invoke(this)
+                        this.additionalAutoProperties = this.additionalAutoProperties.toMutableMap().apply {
+                            this["_segmentVersion"] = analytics.version()
+                        }
+                    }
+                    analytics.log("$key destination loaded")
+                }
+            } catch (exception: SerializationException) {
+                analytics.log("$key destination failed to load. ${exception.message}")
             }
         } else {
-            analytics.log("Appcues destination is disabled via settings")
+            analytics.log("$key destination is disabled via settings")
         }
     }
 
@@ -55,12 +69,16 @@ class AppcuesDestination(
     }
 
     override fun track(payload: TrackEvent): BaseEvent {
-        appcues?.track(payload.event, payload.properties.mapToAppcues())
+        if (payload.isAppcuesInternal.not()) {
+            appcues?.track(payload.event, payload.properties.mapToAppcues())
+        }
         return payload
     }
 
     override fun screen(payload: ScreenEvent): BaseEvent {
-        appcues?.screen(payload.name, payload.properties.mapToAppcues())
+        if (payload.isAppcuesInternal.not()) {
+            appcues?.screen(payload.name, payload.properties.mapToAppcues())
+        }
         return payload
     }
 
@@ -81,10 +99,23 @@ class AppcuesDestination(
         return map
     }
 
+    private val TrackEvent.isAppcuesInternal: Boolean
+        get() = this.event.lowercase().startsWith(APPCUES_EVENT_PREFIX)
+
+    private val ScreenEvent.isAppcuesInternal: Boolean
+        get() = this.name.lowercase().startsWith(APPCUES_EVENT_PREFIX)
+
     private val Any.isAllowedPropertyType: Boolean
         get() {
-            // will need to evolve as we see what primitive types the underlying SDK
-            // supports in the analytics network traffic - ex: URLs or Dates?
-            return this is String || this is Boolean || this is Int || this is Double
+            // The segment library requires passing properties as a JsonObject,
+            // and Appcues supports the following primitive types, not nested arrays
+            // or nested objects. It is not possible for a Date or Uri to be passed
+            // to this plugin, for example, as a property type - only Json types
+            // like String, Boolean or Number.
+            return this is String ||
+                this is Boolean ||
+                this is Double ||
+                this is Int ||
+                this is Long
         }
 }
