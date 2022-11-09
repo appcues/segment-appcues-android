@@ -12,10 +12,10 @@ import com.segment.analytics.kotlin.core.Settings
 import com.segment.analytics.kotlin.core.TrackEvent
 import com.segment.analytics.kotlin.core.platform.DestinationPlugin
 import com.segment.analytics.kotlin.core.platform.Plugin
+import com.segment.analytics.kotlin.core.platform.plugins.logger.LogFilterKind.ERROR
 import com.segment.analytics.kotlin.core.platform.plugins.logger.log
 import com.segment.analytics.kotlin.core.utilities.toContent
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.JsonObject
 
 @Serializable
@@ -30,6 +30,7 @@ class AppcuesDestination(
 ) : DestinationPlugin(), AndroidLifecycle {
 
     companion object {
+
         private const val APPCUES_EVENT_PREFIX = "appcues:"
     }
 
@@ -40,27 +41,42 @@ class AppcuesDestination(
 
     var appcues: Appcues? = null
 
+    @SuppressWarnings("TooGenericExceptionCaught")
     override fun update(settings: Settings, type: Plugin.UpdateType) {
         super.update(settings, type)
 
         if (settings.hasIntegrationSettings(this)) {
             try {
-                val appcuesSettings: AppcuesSettings? = settings.destinationSettings(key)
-                if (appcuesSettings != null) {
-                    appcues = Appcues(context, appcuesSettings.accountId, appcuesSettings.applicationId) {
-                        config?.invoke(this)
-                        this.additionalAutoProperties = this.additionalAutoProperties.toMutableMap().apply {
-                            this["_segmentVersion"] = analytics.version()
-                        }
-                    }
+
+                if (type == Plugin.UpdateType.Initial) {
+                    initAppcues(settings)
+
                     analytics.log("$key destination loaded")
                 }
-            } catch (exception: SerializationException) {
-                analytics.log("$key destination failed to load. ${exception.message}")
+            } catch (exception: Exception) {
+                // any possible exception that happens during initialization will be captured
+                // but wont crash in production
+                analytics.log(message = "$key destination failed to load. ${exception.message}", kind = ERROR)
             }
         } else {
-            analytics.log("$key destination is disabled via settings")
+            analytics.log(message = "$key destination is disabled via settings")
         }
+    }
+
+    private fun initAppcues(settings: Settings) {
+        val appcuesSettings: AppcuesSettings? = settings.destinationSettings(key)
+        // check to see if appcues is not initialized so there is only one instance, and also
+        // ensure appcues settings are available so we can pull required info like accountId and applicationId
+        if(appcues == null && appcuesSettings != null) {
+            appcues = Appcues(context, appcuesSettings.accountId, appcuesSettings.applicationId) {
+                config?.invoke(this)
+                this.additionalAutoProperties = this.additionalAutoProperties.toMutableMap().apply {
+                    // add _segmentVersion to auto properties
+                    this["_segmentVersion"] = analytics.version()
+                }
+            }
+        }
+
     }
 
     override fun identify(payload: IdentifyEvent): BaseEvent {
