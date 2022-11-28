@@ -36,7 +36,7 @@ android {
 dependencies {
 
     implementation 'com.segment.analytics.kotlin:android:1.9.1'
-    api 'com.appcues:appcues:1.1.0'
+    api 'com.appcues:appcues:1.1.1'
 
     testImplementation 'junit:junit:4.13.2'
 
