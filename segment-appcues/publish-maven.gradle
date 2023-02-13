@@ -49,6 +49,9 @@ afterEvaluate {
                 artifactId = pluginProperties.getProperty("ARTIFACT_ID")
                 version = versionName
 
+                artifact sourcesJar
+                artifact javadocJar
+
                 pom {
                     name = pluginProperties.getProperty("NAME")
                     description = pluginProperties.getProperty("DESCRIPTION")

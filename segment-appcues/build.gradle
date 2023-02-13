@@ -4,6 +4,7 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.10'
 }
 
+apply from: 'artifacts-android.gradle'
 apply from: 'publish-maven.gradle'
 
 android {
