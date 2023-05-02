@@ -1,4 +1,6 @@
 # Analytics-Kotlin Appcues
+[![maven](https://img.shields.io/maven-central/v/com.appcues/segment-appcues)](https://repo1.maven.org/maven2/com/appcues/segment-appcues/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/appcues/segment-appcues-android/blob/main/LICENSE)
 
 Add Appcues device mode support to your applications via this plugin for [Analytics-Kotlin](https://github.com/segmentio/analytics-kotlin)
 
