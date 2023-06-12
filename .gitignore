@@ -29,6 +29,7 @@ output.json
 /.idea/navEditor.xml
 /.idea/deploymentTargetDropDown.xml
 /.idea/assetWizardSettings.xml
+/.idea/kotlinc.xml
 
 # Keystore files
 *.jks
