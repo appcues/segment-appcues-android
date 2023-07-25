@@ -8,7 +8,10 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import com.appcues.segment.examples.kotlin.ExampleApplication
 import com.appcues.segment.examples.kotlin.R
 import com.appcues.segment.examples.kotlin.databinding.FragmentProfileBinding
@@ -23,11 +26,7 @@ class ProfileFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val analytics = ExampleApplication.analytics
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
+    private val appcues = ExampleApplication.appcuesDestination.appcues
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,6 +59,35 @@ class ProfileFragment : Fragment() {
         return root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val menuHost: MenuHost = requireActivity()
+
+        menuHost.addMenuProvider(
+            object : MenuProvider {
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    menuInflater.inflate(R.menu.profile_menu, menu)
+                }
+
+                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                    return when (menuItem.itemId) {
+                        R.id.sign_out -> {
+                            appcues?.reset()
+                            ExampleApplication.currentUserID = ""
+                            val intent = Intent(activity, SignInActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME
+                            startActivity(intent)
+                            activity?.finish()
+                            true
+                        }
+                        else -> false
+                    }
+                }
+            },
+            viewLifecycleOwner,
+            Lifecycle.State.RESUMED
+        )
+    }
+
     override fun onResume() {
         super.onResume()
         analytics.screen("Update Profile")
@@ -68,25 +96,5 @@ class ProfileFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.profile_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.sign_out -> {
-                analytics.reset()
-                ExampleApplication.currentUserID = ""
-                val intent = Intent(activity, SignInActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME
-                startActivity(intent)
-                activity?.finish()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 }

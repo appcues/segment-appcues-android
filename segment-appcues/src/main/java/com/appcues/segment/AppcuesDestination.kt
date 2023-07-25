@@ -12,7 +12,7 @@ import com.segment.analytics.kotlin.core.Settings
 import com.segment.analytics.kotlin.core.TrackEvent
 import com.segment.analytics.kotlin.core.platform.DestinationPlugin
 import com.segment.analytics.kotlin.core.platform.Plugin
-import com.segment.analytics.kotlin.core.platform.plugins.logger.LogFilterKind.ERROR
+import com.segment.analytics.kotlin.core.platform.plugins.logger.LogKind.ERROR
 import com.segment.analytics.kotlin.core.platform.plugins.logger.log
 import com.segment.analytics.kotlin.core.utilities.toContent
 import kotlinx.serialization.Serializable
