@@ -41,6 +41,9 @@ Just under your Analytics-Kotlin library setup, call `analytics.add(plugin = ...
 
 Your events will now begin to flow to Appcues in device mode.
 
+## Supporting Builder Preview and Screen Capture
+
+During installation, follow the steps outlined in in the Appcues Android SDK documentation for [Configuring the Appcues URL Scheme](https://github.com/appcues/appcues-android-sdk/blob/main/docs/URLSchemeConfiguring.md). This is necessary for the complete Appcues builder experience, supporting experience preview, screen capture and debugging.
 
 ## Support
 
