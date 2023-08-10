@@ -15,7 +15,14 @@
         <activity
             android:name=".main.MainActivity"
             android:exported="false"
-            android:label="@string/title_activity_main" />
+            android:label="@string/title_activity_main">
+            <intent-filter>
+                <data android:scheme="appcues-APPCUES_APPLICATION_ID" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".signin.SignInActivity"
             android:exported="true" >
