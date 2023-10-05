@@ -8,11 +8,11 @@ apply from: 'artifacts-android.gradle'
 apply from: 'publish-maven.gradle'
 
 android {
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         minSdk 21
-        targetSdk 33
+        targetSdk 34
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -37,7 +37,7 @@ android {
 dependencies {
 
     implementation 'com.segment.analytics.kotlin:android:1.13.0'
-    api 'com.appcues:appcues:3.1.0'
+    api 'com.appcues:appcues:3.1.2'
 
     testImplementation 'junit:junit:4.13.2'
 
