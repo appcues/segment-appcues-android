@@ -21,4 +21,5 @@
     <string name="save_button">save</string>
     <string name="group_label">Group</string>
     <string name="anonymous_user_button">Anonymous User</string>
+    <string name="events_menu_debug">Debug</string>
 </resources>
