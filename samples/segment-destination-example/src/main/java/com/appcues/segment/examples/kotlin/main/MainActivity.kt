@@ -8,7 +8,6 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.appcues.segment.examples.kotlin.ExampleApplication
-import com.appcues.segment.examples.kotlin.ExampleApplication.Companion
 import com.appcues.segment.examples.kotlin.R.id
 import com.appcues.segment.examples.kotlin.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView

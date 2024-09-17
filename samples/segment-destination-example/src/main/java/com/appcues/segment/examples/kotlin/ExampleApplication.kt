@@ -12,6 +12,7 @@ class ExampleApplication : Application() {
         lateinit var analytics: Analytics
         lateinit var appcuesDestination: AppcuesDestination
         var currentUserID = "default-0000"
+        private const val SESSION_TIMEOUT = 3600
     }
 
     override fun onCreate() {
@@ -27,7 +28,7 @@ class ExampleApplication : Application() {
         appcuesDestination = AppcuesDestination(applicationContext) {
             // optionally apply customizations using the AppcuesConfig here
             loggingLevel = LoggingLevel.DEBUG
-            sessionTimeout = 3600
+            sessionTimeout = SESSION_TIMEOUT
         }
         analytics.add(appcuesDestination)
     }
