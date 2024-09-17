@@ -67,7 +67,7 @@ class AppcuesDestination(
         val appcuesSettings: AppcuesSettings? = settings.destinationSettings(key)
         // check to see if appcues is not initialized so there is only one instance, and also
         // ensure appcues settings are available so we can pull required info like accountId and applicationId
-        if(appcues == null && appcuesSettings != null) {
+        if (appcues == null && appcuesSettings != null) {
             appcues = Appcues(context, appcuesSettings.accountId, appcuesSettings.applicationId) {
                 config?.invoke(this)
                 this.additionalAutoProperties = this.additionalAutoProperties.toMutableMap().apply {
@@ -76,7 +76,6 @@ class AppcuesDestination(
                 }
             }
         }
-
     }
 
     override fun identify(payload: IdentifyEvent): BaseEvent {
