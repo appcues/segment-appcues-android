@@ -18,6 +18,8 @@ output.json
 
 # IntelliJ
 *.iml
+/.idea/AndroidProjectSystem.xml
+/.idea/runConfigurations.xml
 /.idea/libraries/
 /.idea/inspectionProfiles/
 /.idea/compiler.xml
@@ -32,6 +34,7 @@ output.json
 /.idea/kotlinc.xml
 /.idea/deploymentTargetSelector.xml
 /.idea/other.xml
+/.idea/caches/
 
 # Keystore files
 *.jks
