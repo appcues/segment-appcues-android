@@ -1,11 +1,14 @@
+import com.vanniktech.maven.publish.SonatypeHost
+
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'org.jetbrains.kotlin.plugin.serialization'
+    id "com.vanniktech.maven.publish" version "0.31.0"
 }
 
 apply from: 'artifacts-android.gradle'
-apply from: 'publish-maven.gradle'
+apply from: 'segment-appcues-properties.gradle'
 
 android {
     compileSdk 34
@@ -16,6 +19,8 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+
+        buildConfigField "String", "PLUGIN_VERSION", "\"${VERSION_NAME}\""
     }
 
     buildTypes {
@@ -43,4 +48,36 @@ dependencies {
 
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
+}
+
+mavenPublishing {
+    coordinates(GROUP_ID, ARTIFACT_ID, VERSION_NAME)
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, false)
+    signAllPublications()
+
+    pom {
+        name = NAME
+        description = DESCRIPTION
+        url = ORG_URL
+        licenses {
+            license {
+                name = LICENSE
+                url = LICENSE_URL
+            }
+        }
+        developers {
+            developer {
+                id = ORG_ID
+                name = ORG_NAME
+                organization = ORG_NAME
+                organizationUrl = ORG_URL
+                email = ORG_EMAIL
+            }
+        }
+        scm {
+            connection = 'scm:git:git://github.com/' + GITHUB_PATH + '.git'
+            developerConnection = 'scm:git:ssh://github.com:' + GITHUB_PATH + '.git'
+            url = 'https://github.com/' + GITHUB_PATH
+        }
+    }
 }

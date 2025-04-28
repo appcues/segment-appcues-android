@@ -142,4 +142,4 @@ gh release create $newVersion -F $tempFile -t $newVersion
 rm $tempFile
 
 # publish to Maven Central
-gradle segment-appcues:publishReleasePublicationToOSSRHRepository
+gradle segment-appcues:publishToMavenCentral
